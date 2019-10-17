@@ -26,7 +26,8 @@
     }
   },
   "extra"       : {
-    "think": {
+    "itxq-phinx": [],
+    "think"     : {
       "services": [
         "itxq\\phinx\\service\\Command"
       ],
