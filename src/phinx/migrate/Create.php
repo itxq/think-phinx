@@ -12,8 +12,6 @@
 
 namespace itxq\phinx\migrate;
 
-use DateTime;
-use DateTimeZone;
 use http\Exception\InvalidArgumentException;
 use http\Exception\RuntimeException;
 use Phinx\Util\Util;
@@ -61,7 +59,7 @@ class Create extends Base
      * @return string
      * @throws \Exception
      */
-    public function create(string $className): string
+    protected function create(string $className): string
     {
         $path = $this->ensureDirectory();
 
@@ -117,30 +115,6 @@ class Create extends Base
             throw new InvalidArgumentException(sprintf('directory "%s" is not writable', $path));
         }
         return realpath($path);
-    }
-
-    /**
-     * 生成指定格式的文件名
-     * @param $className
-     * @return string
-     * @throws \Exception
-     */
-    public function mapClassNameToFileName($className): string
-    {
-
-        return 'Db' . $this->getCurrentTimestamp() . parse_name($className, 1);
-    }
-
-    /**
-     * 获取当前时间字符串 UTC
-     * @return string
-     * @throws \Exception
-     */
-    protected function getCurrentTimestamp(): string
-    {
-        $dt = new DateTime('now', new DateTimeZone('UTC'));
-
-        return $dt->format('YmdHis');
     }
 
     /**

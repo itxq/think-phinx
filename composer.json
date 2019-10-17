@@ -13,6 +13,7 @@
   "repositories": [],
   "require"     : {
     "php"               : ">=7.1.0",
+    "ext-http"          : "*",
     "ext-pdo"           : "*",
     "ext-json"          : "*",
     "ext-iconv"         : "*",

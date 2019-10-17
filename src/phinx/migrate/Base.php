@@ -12,6 +12,8 @@
 
 namespace itxq\phinx\migrate;
 
+use DateTime;
+use DateTimeZone;
 use http\Exception\InvalidArgumentException;
 use itxq\phinx\Phinx;
 use Phinx\Db\Adapter\AdapterFactory;
@@ -114,7 +116,8 @@ abstract class Base extends Phinx
             if ($classInfo === null) {
                 continue;
             }
-            [$fileName, $class, $version] = $classInfo;
+            $class   = $classInfo['class'];
+            $version = $classInfo['version'];
 
             if (isset($versions[$version])) {
                 throw new InvalidArgumentException(
@@ -198,9 +201,44 @@ abstract class Base extends Phinx
      */
     protected function getClassInfoFromFileName($fileName): array
     {
+        $info = null;
         if (preg_match('/^(Db(\d+).*?)\.php$/', basename($fileName), $matches)) {
-            return $matches;
+            $info = [
+                'file'    => $matches[0],
+                'class'   => $matches[1],
+                'version' => $matches[2],
+            ];
+        } else if (preg_match('/^(\d+)_(.*?)\.php$/', basename($fileName), $matches)) {
+            $info = [
+                'file'    => $matches[0],
+                'class'   => parse_name($matches[2], 1),
+                'version' => $matches[1],
+            ];
         }
-        return null;
+        return $info;
+    }
+
+    /**
+     * 生成指定格式的文件名
+     * @param $className
+     * @return string
+     * @throws \Exception
+     */
+    protected function mapClassNameToFileName($className): string
+    {
+
+        return 'Db' . $this->getCurrentTimestamp() . parse_name($className, 1);
+    }
+
+    /**
+     * 获取当前时间字符串 UTC
+     * @return string
+     * @throws \Exception
+     */
+    protected function getCurrentTimestamp(): string
+    {
+        $dt = new DateTime('now', new DateTimeZone('UTC'));
+
+        return $dt->format('YmdHis');
     }
 }
