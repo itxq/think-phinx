@@ -1,0 +1,21 @@
+<?php
+
+use itxq\phinx\traits\Migrator;
+use Phinx\Migration\AbstractMigration;
+
+/**
+ * Class MigratorClass
+ */
+class MigratorClass extends AbstractMigration
+{
+    use Migrator;
+
+    /**
+     * 迁移、回滚入口
+     */
+    public function change(): void
+    {
+
+    }
+}
+

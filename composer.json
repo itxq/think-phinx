@@ -1,0 +1,38 @@
+{
+  "name"        : "itxq/think-phinx",
+  "description" : "Think-Phinx 数据库迁移工具",
+  "type"        : "library",
+  "license"     : "Apache-2.0",
+  "authors"     : [
+    {
+      "name"    : "IT小强xqitw.cn",
+      "email"   : "mail@xqitw.cn",
+      "homepage": "https://www.xqitw.cn/"
+    }
+  ],
+  "repositories": [],
+  "require"     : {
+    "php"               : ">=7.1.0",
+    "ext-pdo"           : "*",
+    "ext-json"          : "*",
+    "ext-iconv"         : "*",
+    "topthink/framework": "^6.0",
+    "robmorgan/phinx"   : "^0.10.8"
+  },
+  "require-dev" : {},
+  "autoload"    : {
+    "psr-4": {
+      "itxq\\": "src"
+    }
+  },
+  "extra"       : {
+    "think": {
+      "services": [
+        "itxq\\phinx\\service\\Command"
+      ],
+      "config"  : {
+        "phinx": "src/config.php"
+      }
+    }
+  }
+}
