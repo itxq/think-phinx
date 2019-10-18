@@ -14,13 +14,13 @@ namespace itxq\phinx\migrate;
 
 use DateTime;
 use DateTimeZone;
-use http\Exception\InvalidArgumentException;
 use itxq\phinx\Phinx;
 use Phinx\Db\Adapter\AdapterFactory;
 use Phinx\Db\Adapter\ProxyAdapter;
 use Phinx\Migration\AbstractMigration;
 use Phinx\Migration\MigrationInterface;
 use think\console\Output;
+use think\Exception;
 
 /**
  * migrate 命令行基类
@@ -97,6 +97,8 @@ abstract class Base extends Phinx
      * 获取迁移实例列表
      * @param string $package
      * @return array
+     * @throws \Exception
+     * @throws \think\Exception
      */
     protected function getMigrations(string $package): array
     {
@@ -120,7 +122,7 @@ abstract class Base extends Phinx
             $version = $classInfo['version'];
 
             if (isset($versions[$version])) {
-                throw new InvalidArgumentException(
+                throw new Exception(
                     sprintf(
                         'Duplicate migration - "%s" has the same version as "%s"',
                         $filePath,
@@ -130,7 +132,7 @@ abstract class Base extends Phinx
             }
 
             if (isset($fileNames[$class])) {
-                throw new InvalidArgumentException(
+                throw new Exception(
                     sprintf(
                         'Migration "%s" has the same name as "%s"',
                         basename($filePath),
@@ -145,7 +147,7 @@ abstract class Base extends Phinx
             /** @noinspection PhpIncludeInspection */
             require_once $filePath;
             if (!class_exists($class)) {
-                throw new InvalidArgumentException(
+                throw new Exception(
                     sprintf(
                         'Could not find class "%s" in file "%s"',
                         $class,
@@ -156,7 +158,7 @@ abstract class Base extends Phinx
             // instantiate it
             $migration = new $class(null, $version);
             if (!($migration instanceof AbstractMigration)) {
-                throw new InvalidArgumentException(
+                throw new Exception(
                     sprintf(
                         'The class "%s" in file "%s" must extend \Phinx\Migration\AbstractMigration',
                         $class,
@@ -202,13 +204,14 @@ abstract class Base extends Phinx
     protected function getClassInfoFromFileName($fileName): array
     {
         $info = null;
-        if (preg_match('/^(Db(\d+).*?)\.php$/', basename($fileName), $matches)) {
-            $info = [
-                'file'    => $matches[0],
-                'class'   => $matches[1],
-                'version' => $matches[2],
-            ];
-        } else if (preg_match('/^(\d+)_(.*?)\.php$/', basename($fileName), $matches)) {
+        /*  if (preg_match('/^(Db(\d+).*?)\.php$/', basename($fileName), $matches)) {
+              $info = [
+                  'file'    => $matches[0],
+                  'class'   => $matches[1],
+                  'version' => $matches[2],
+              ];
+          } else*/
+        if (preg_match('/^(\d+)_(.*?)\.php$/', basename($fileName), $matches)) {
             $info = [
                 'file'    => $matches[0],
                 'class'   => parse_name($matches[2], 1),
@@ -227,7 +230,7 @@ abstract class Base extends Phinx
     protected function mapClassNameToFileName($className): string
     {
 
-        return 'Db' . $this->getCurrentTimestamp() . parse_name($className, 1);
+        return $this->getCurrentTimestamp() . '_' . parse_name($className);
     }
 
     /**

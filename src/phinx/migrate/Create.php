@@ -12,12 +12,11 @@
 
 namespace itxq\phinx\migrate;
 
-use http\Exception\InvalidArgumentException;
-use http\Exception\RuntimeException;
 use Phinx\Util\Util;
 use think\console\Input;
 use think\console\input\Argument;
 use think\console\Output;
+use think\Exception;
 
 /**
  * 创建迁移文件
@@ -57,6 +56,7 @@ class Create extends Base
      * 创建迁移文件
      * @param string $className
      * @return string
+     * @throws \think\Exception
      * @throws \Exception
      */
     protected function create(string $className): string
@@ -64,12 +64,12 @@ class Create extends Base
         $path = $this->ensureDirectory();
 
         if (!Util::isValidPhinxClassName($className)) {
-            throw new InvalidArgumentException(sprintf('The migration class name "%s" is invalid. Please use CamelCase format.',
+            throw new Exception(sprintf('The migration class name "%s" is invalid. Please use CamelCase format.',
                 $className));
         }
 
         if (!Util::isUniqueMigrationClassName($className, $path)) {
-            throw new InvalidArgumentException(sprintf('The migration class name "%s" already exists', $className));
+            throw new Exception(sprintf('The migration class name "%s" already exists', $className));
         }
 
         $trueClass = $this->mapClassNameToFileName($className);
@@ -78,7 +78,7 @@ class Create extends Base
         $filePath = $path . DIRECTORY_SEPARATOR . $fileName;
 
         if (is_file($filePath)) {
-            throw new InvalidArgumentException(sprintf('The file "%s" already exists', $filePath));
+            throw new Exception(sprintf('The file "%s" already exists', $filePath));
         }
 
         // Verify that the template creation class (or the aliased class) exists and that it implements the required interface.
@@ -89,11 +89,11 @@ class Create extends Base
 
         // inject the class names appropriate to this migration
         $contents = strtr($contents, [
-            'MigratorClass' => $trueClass,
+            'MigratorClass' => parse_name($className, 1),
         ]);
 
         if (false === file_put_contents($filePath, $contents)) {
-            throw new RuntimeException(sprintf('The file "%s" could not be written to', $path));
+            throw new Exception(sprintf('The file "%s" could not be written to', $path));
         }
 
         return $filePath;
@@ -102,17 +102,18 @@ class Create extends Base
     /**
      * migrate目录检查
      * @return string
+     * @throws \think\Exception
      */
     protected function ensureDirectory(): string
     {
         $path = $this->getLocalPhinxPath() . 'migrations' . DIRECTORY_SEPARATOR;
 
         if (!is_dir($path) && !mkdir($path, 0755, true) && !is_dir($path)) {
-            throw new InvalidArgumentException(sprintf('directory "%s" does not exist', $path));
+            throw new Exception(sprintf('directory "%s" does not exist', $path));
         }
 
         if (!is_writable($path)) {
-            throw new InvalidArgumentException(sprintf('directory "%s" is not writable', $path));
+            throw new Exception(sprintf('directory "%s" is not writable', $path));
         }
         return realpath($path);
     }

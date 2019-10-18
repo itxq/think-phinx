@@ -112,6 +112,7 @@ EOT
      * @param \think\console\Output $output
      * @param null                  $version
      * @param bool                  $force
+     * @throws \think\Exception
      */
     protected function rollbackToVersion(string $package, Output $output, $version = null, $force = false): void
     {
@@ -173,6 +174,7 @@ EOT
      * @param \think\console\Output $output
      * @param \DateTime             $dateTime
      * @param bool                  $force
+     * @throws \think\Exception
      */
     protected function rollbackToDateTime(string $package, Output $output, DateTime $dateTime, $force = false): void
     {

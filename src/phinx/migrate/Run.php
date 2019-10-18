@@ -106,6 +106,7 @@ EOT
      * @param string                $package
      * @param \think\console\Output $output
      * @param \DateTime             $dateTime
+     * @throws \think\Exception
      */
     protected function migrateToDateTime(string $package, Output $output, DateTime $dateTime): void
     {
@@ -126,6 +127,7 @@ EOT
      * @param string                $package
      * @param \think\console\Output $output
      * @param null                  $version
+     * @throws \think\Exception
      */
     protected function migrateToVersion(string $package, Output $output, $version = null): void
     {
