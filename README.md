@@ -12,7 +12,7 @@ Think-Phinx 数据库迁移工具
 
 [【GitHub:】https://github.com/itxq/think-phinx](https://github.com/itxq/think-phinx)
 
-[【码云:】https://gitee.com/itxq/think-phinx](https://github.com/itxq/think-phinx)
+[【码云:】https://gitee.com/itxq/think-phinx](https://gitee.com/itxq/think-phinx)
 
 ### 扩展安装：
 
