@@ -1,0 +1,20 @@
+<?php
+
+use itxq\phinx\traits\Migrator;
+use think\migration\Seeder;
+
+/**
+ * Class SeederClass
+ */
+class SeederClass extends Seeder
+{
+    use Migrator;
+
+    /**
+     * 执行入口
+     */
+    public function run(): void
+    {
+
+    }
+}
