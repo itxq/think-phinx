@@ -40,7 +40,6 @@ class Create extends Base
      * 执行指令
      * @param \think\console\Input  $input
      * @param \think\console\Output $output
-     * @return int|void|null
      * @throws \Exception
      */
     protected function execute(Input $input, Output $output): void
@@ -61,7 +60,7 @@ class Create extends Base
      */
     protected function create(string $className): string
     {
-        $path = $this->ensureDirectory();
+        $path = $this->ensureDirectory('migrations');
 
         if (!Util::isValidPhinxClassName($className)) {
             throw new Exception(sprintf('The migration class name "%s" is invalid. Please use CamelCase format.',
@@ -97,25 +96,6 @@ class Create extends Base
         }
 
         return $filePath;
-    }
-
-    /**
-     * migrate目录检查
-     * @return string
-     * @throws \think\Exception
-     */
-    protected function ensureDirectory(): string
-    {
-        $path = $this->getLocalPhinxPath() . 'migrations' . DIRECTORY_SEPARATOR;
-
-        if (!is_dir($path) && !mkdir($path, 0755, true) && !is_dir($path)) {
-            throw new Exception(sprintf('directory "%s" does not exist', $path));
-        }
-
-        if (!is_writable($path)) {
-            throw new Exception(sprintf('directory "%s" is not writable', $path));
-        }
-        return realpath($path);
     }
 
     /**
