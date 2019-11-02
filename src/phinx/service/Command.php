@@ -12,9 +12,11 @@
 
 namespace itxq\phinx\service;
 
-use itxq\phinx\migrate\Create;
 use itxq\phinx\migrate\Rollback;
-use itxq\phinx\migrate\Run;
+use itxq\phinx\migrate\Create as MigrateCreate;
+use itxq\phinx\seed\Create as SeedCreate;
+use itxq\phinx\migrate\Run as MigrateRun;
+use itxq\phinx\seed\Run as SeedRun;
 use think\Service;
 
 /**
@@ -30,12 +32,16 @@ class Command extends Service
     public function boot(): void
     {
         $this->commands([
-            // 执行迁移
-            Run::class,
             // 执行回滚
             Rollback::class,
             // 创建迁移文件
-            Create::class
+            MigrateCreate::class,
+            // 执行迁移
+            MigrateRun::class,
+            // 创建 seeder 文件
+            SeedCreate::class,
+            // 执行 seed
+            SeedRun::class
         ]);
     }
 }
