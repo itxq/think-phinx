@@ -16,7 +16,6 @@ use itxq\phinx\Phinx;
 use Phinx\Seed\AbstractSeed;
 use Phinx\Util\Util;
 use think\Exception;
-use think\migration\Seeder;
 
 /**
  * seed 命令行基类
@@ -33,7 +32,7 @@ abstract class Base extends Phinx
     /**
      * 获取seeds
      * @param string $package
-     * @return mixed|\think\migration\Seeder[]
+     * @return mixed|AbstractSeed[]
      * @throws \think\Exception
      */
     public function getSeeds(string $package)
@@ -46,7 +45,7 @@ abstract class Base extends Phinx
 
         // filter the files to only get the ones that match our naming scheme
         // $fileNames = [];
-        /** @var Seeder[] $seeds */
+        /** @var AbstractSeed[] $seeds */
         $seeds = [];
 
         foreach ($phpFiles as $filePath) {
@@ -63,7 +62,7 @@ abstract class Base extends Phinx
                 }
 
                 // instantiate it
-                $seed = new $class($this->input, $this->output);
+                $seed = new $class();
 
                 if (!($seed instanceof AbstractSeed)) {
                     throw new Exception(sprintf('The class "%s" in file "%s" must extend \Phinx\Seed\AbstractSeed',

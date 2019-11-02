@@ -45,7 +45,7 @@ class Create extends Base
     protected function execute(Input $input, Output $output): void
     {
 
-        $path = $this->ensureDirectory('seed');
+        $path = $this->ensureDirectory('seeds');
 
         $className = $input->getArgument('name');
 

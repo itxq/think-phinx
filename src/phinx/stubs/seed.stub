@@ -1,12 +1,12 @@
 <?php
 
 use itxq\phinx\traits\Migrator;
-use think\migration\Seeder;
+use Phinx\Seed\AbstractSeed;
 
 /**
  * Class SeederClass
  */
-class SeederClass extends Seeder
+class SeederClass extends AbstractSeed
 {
     use Migrator;
 

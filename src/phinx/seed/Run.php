@@ -57,7 +57,7 @@ EOT
         $packageName = (string)$input->getOption('package');
         if (empty($packageName)) {
             // 迁移本地
-            if (is_dir($this->getLocalPhinxPath() . 'migrations')) {
+            if (is_dir($this->getLocalPhinxPath() . 'seeds')) {
                 $this->seed('local', $output, $seed);
             }
             // 迁移所有包
@@ -76,14 +76,13 @@ EOT
     /**
      * 执行 seed
      * @param string                $package
-     * @param \think\console\Input  $input
      * @param \think\console\Output $output
      * @param null                  $seed
      * @throws \think\Exception
      */
     public function seed(string $package, Output $output, $seed = null): void
     {
-        $output->writeln('>>> <info>' . $package . ': <comment>migrating!</comment></info>');
+        $output->writeln('>>> <info>' . $package . ': <comment>seeding!</comment></info>');
         $start = microtime(true);
         $seeds = $this->getSeeds($package);
         if (null === $seed) {
