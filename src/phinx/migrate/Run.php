@@ -155,7 +155,7 @@ EOT
                     break;
                 }
 
-                if (in_array($migration->getVersion(), $versions, true)) {
+                if (in_array($migration->getVersion(), $versions, false)) {
                     $this->executeMigration($package, $output, $migration, MigrationInterface::DOWN);
                 }
             }
@@ -166,7 +166,7 @@ EOT
                 if ($migration->getVersion() > $version) {
                     break;
                 }
-                if (!in_array($migration->getVersion(), $versions, true)) {
+                if (!in_array($migration->getVersion(), $versions, false)) {
                     $this->executeMigration($package, $output, $migration, MigrationInterface::UP);
                 }
             }
