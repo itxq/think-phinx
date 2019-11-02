@@ -171,7 +171,7 @@ abstract class Base extends Phinx
         }
 
         ksort($versions);
-
+        $this->migrations[$package] = $versions;
         return $versions;
     }
 
