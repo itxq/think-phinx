@@ -14,6 +14,7 @@ namespace itxq\phinx;
 
 use Phinx\Db\Adapter\AdapterFactory;
 use Phinx\Db\Adapter\AdapterInterface;
+use think\Exception;
 
 /**
  * Phinx 命令行基类
@@ -184,5 +185,25 @@ abstract class Phinx extends Command
         $localPath = $this->getPhinxConfig('local')['phinx_path'];
         $localPath = rtrim(str_replace(['/', '\\'], [$di, $di], $localPath), $di) . $di;
         return $localPath;
+    }
+
+    /**
+     * phinx目录检查
+     * @param string $type 类型（migrations|seeds）
+     * @return string
+     * @throws \think\Exception
+     */
+    protected function ensureDirectory(string $type): string
+    {
+        $path = $this->getLocalPhinxPath() . $type . DIRECTORY_SEPARATOR;
+
+        if (!is_dir($path) && !mkdir($path, 0755, true) && !is_dir($path)) {
+            throw new Exception(sprintf('directory "%s" does not exist', $path));
+        }
+
+        if (!is_writable($path)) {
+            throw new Exception(sprintf('directory "%s" is not writable', $path));
+        }
+        return realpath($path);
     }
 }
