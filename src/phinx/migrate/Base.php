@@ -201,7 +201,7 @@ abstract class Base extends Phinx
      * @param $fileName
      * @return array|null
      */
-    protected function getClassInfoFromFileName($fileName): array
+    protected function getClassInfoFromFileName($fileName): ?array
     {
         $info = null;
         /*  if (preg_match('/^(Db(\d+).*?)\.php$/', basename($fileName), $matches)) {
