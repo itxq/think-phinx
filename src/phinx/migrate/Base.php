@@ -67,7 +67,7 @@ abstract class Base extends Phinx
                 $proxyAdapter = AdapterFactory::instance()->getWrapper('proxy', $this->getAdapter($package));
                 $migration->setAdapter($proxyAdapter);
                 /** @noinspection PhpUndefinedMethodInspection */
-                $migration->change();
+                $migration->setMigratingUp(false)->change();
                 $proxyAdapter->executeInvertedCommands();
                 $migration->setAdapter($this->getAdapter($package));
             } else {
