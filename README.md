@@ -7,6 +7,18 @@ Think-Phinx 数据库迁移工具
 [![Latest Unstable Version](https://poser.pugx.org/itxq/think-phinx/v/unstable)](//packagist.org/packages/itxq/think-phinx)
 [![License](https://poser.pugx.org/itxq/think-phinx/license)](https://packagist.org/packages/itxq/think-phinx)
 [![composer.lock available](https://poser.pugx.org/itxq/think-phinx/composerlock)](https://packagist.org/packages/itxq/think-phinx)
+
+> 本扩展在 `top-think/think-migration` 扩展的基础进行了优化修改。`phinx` 采用composer引用；并且增加了一个新的功能用于迁移其他composer包自带的迁移文件。
+
+> 迁移其他composer包中的迁移文件时，需要其他包在composer.json 指定路径, 格式如下
+
+```json
+{
+  "extra": {
+    "itxq-phinx": "database"
+  }
+}
+```
   
 ### 开源地址：
 
