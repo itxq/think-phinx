@@ -20,10 +20,15 @@ Think-Phinx 数据库迁移工具
  
 ### 命令说明
 
-> **migrate:create** -> Create a new migration
-
-> **migrate:rollback** -> Rollback the last or to a specific migration
-
-> **migrate:run** -> Migrate the database
+* **migrate:create**  
+    Create a new migration
+* **migrate:rollback**  
+    Rollback the last or to a specific migration
+* **migrate:run**  
+    Migrate the database
+* **seed:create**  
+    Create a new database seeder
+* **seed:run**  
+    Run database seeders
 
 
