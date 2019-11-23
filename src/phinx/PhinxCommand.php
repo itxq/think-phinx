@@ -14,6 +14,7 @@ namespace itxq\phinx;
 
 use Phinx\Db\Adapter\AdapterInterface;
 use think\Exception;
+use \itxq\phinx\facade\Phinx;
 
 /**
  * Phinx 命令行基类
