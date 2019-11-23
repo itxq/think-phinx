@@ -12,7 +12,7 @@
 
 namespace itxq\phinx\seed;
 
-use itxq\phinx\Phinx;
+use itxq\phinx\PhinxCommand;
 use Phinx\Seed\AbstractSeed;
 use Phinx\Util\Util;
 use think\Exception;
@@ -22,7 +22,7 @@ use think\Exception;
  * Class Base
  * @package itxq\phinx\seed
  */
-abstract class Base extends Phinx
+abstract class Base extends PhinxCommand
 {
     /**
      * @var array seed 实例列表

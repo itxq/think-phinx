@@ -14,7 +14,7 @@ namespace itxq\phinx\migrate;
 
 use DateTime;
 use DateTimeZone;
-use itxq\phinx\Phinx;
+use itxq\phinx\PhinxCommand;
 use Phinx\Db\Adapter\AdapterFactory;
 use Phinx\Db\Adapter\ProxyAdapter;
 use Phinx\Migration\AbstractMigration;
@@ -27,7 +27,7 @@ use think\Exception;
  * Class Base
  * @package itxq\phinx\migrate
  */
-abstract class Base extends Phinx
+abstract class Base extends PhinxCommand
 {
     /**
      * @var array 迁移实例列表

@@ -1,7 +1,7 @@
 <?php
 /**
  *  ==================================================================
- *        文 件 名: Phinx.php
+ *        文 件 名: PhinxCommand.php
  *        概    要: Phinx 命令行基类
  *        作    者: IT小强
  *        创建时间: 2019-10-12 15:06
@@ -21,7 +21,7 @@ use think\Exception;
  * Class Phinx
  * @package itxq\phinx
  */
-abstract class Phinx extends Command
+abstract class PhinxCommand extends Command
 {
     /**
      * @var AdapterInterface
