@@ -50,9 +50,12 @@ class Create extends Base
         $className = $input->getArgument('name');
 
         if (!Util::isValidPhinxClassName($className)) {
-            throw new Exception(sprintf('The seed class name "%s" is invalid. Please use CamelCase format',
-                $className));
+            throw new Exception(
+                sprintf('The seed class name "%s" is invalid. Please use CamelCase format', $className)
+            );
         }
+
+        $className = 'Seed' . date('YmdHis') . $className;
 
         // Compute the file path
         $filePath = $path . DIRECTORY_SEPARATOR . $className . '.php';
