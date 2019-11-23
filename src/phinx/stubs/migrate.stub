@@ -1,15 +1,12 @@
 <?php
 
-use itxq\phinx\traits\Migrator;
-use Phinx\Migration\AbstractMigration;
+use itxq\phinx\stubs\Migration;
 
 /**
  * Class MigratorClass
  */
-class MigratorClass extends AbstractMigration
+class MigratorClass extends Migration
 {
-    use Migrator;
-
     /**
      * 迁移、回滚入口
      */
