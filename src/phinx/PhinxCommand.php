@@ -12,7 +12,6 @@
 
 namespace itxq\phinx;
 
-use Phinx\Db\Adapter\AdapterFactory;
 use Phinx\Db\Adapter\AdapterInterface;
 use think\Exception;
 
@@ -43,13 +42,7 @@ abstract class PhinxCommand extends Command
         if (isset($this->adapter[$package])) {
             return $this->adapter[$package];
         }
-        $options = $this->getPhinxConfig($package);
-
-        $adapter = AdapterFactory::instance()->getAdapter($options['adapter'], $options);
-        if ($adapter->hasOption('table_prefix') || $adapter->hasOption('table_suffix')) {
-            $adapter = AdapterFactory::instance()->getWrapper('prefix', $adapter);
-        }
-        $this->adapter[$package] = $adapter;
+        $this->adapter[$package] = Phinx::getAdapter($package);
         return $this->adapter[$package];
     }
 
@@ -60,44 +53,7 @@ abstract class PhinxCommand extends Command
      */
     protected function getPhinxConfig(string $package): array
     {
-        $default = $this->app->config->get('database.default');
-
-        $config = $this->app->config->get("database.connections.{$default}");
-
-        if (0 === (int)$config['deploy']) {
-            $phinxConfig = [
-                'adapter'      => $config['type'],
-                'host'         => $config['hostname'],
-                'name'         => $config['database'],
-                'user'         => $config['username'],
-                'pass'         => $config['password'],
-                'port'         => $config['hostport'],
-                'charset'      => $config['charset'],
-                'table_prefix' => $config['prefix'],
-            ];
-        } else {
-            $phinxConfig = [
-                'adapter'      => explode(',', $config['type'])[0],
-                'host'         => explode(',', $config['hostname'])[0],
-                'name'         => explode(',', $config['database'])[0],
-                'user'         => explode(',', $config['username'])[0],
-                'pass'         => explode(',', $config['password'])[0],
-                'port'         => explode(',', $config['hostport'])[0],
-                'charset'      => explode(',', $config['charset'])[0],
-                'table_prefix' => explode(',', $config['prefix'])[0],
-            ];
-        }
-
-        $table = $this->app->config->get('phinx.migration_table', 'migration');
-        if (!empty($package)) {
-            $table .= '_' . strtolower(md5($package));
-        }
-
-        $defaultPhinxPath                       = realpath($this->app->getRootPath()) . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR;
-        $phinxConfig['phinx_path']              = $this->app->config->get('phinx.phinx_path', $defaultPhinxPath);
-        $phinxConfig['default_migration_table'] = $phinxConfig['table_prefix'] . $table;
-        $phinxConfig['version_order']           = $this->app->config->get('phinx.version_order', 'creation');
-        return $phinxConfig;
+        return Phinx::getPhinxConfig($package);
     }
 
     /**
@@ -129,7 +85,7 @@ abstract class PhinxCommand extends Command
         if (empty($packageName)) {
             return $phinxConfig;
         }
-        if ($packageName === 'local') {
+        if ($packageName === Phinx::LOCAL) {
             $phinxPath      = $this->getLocalPhinxPath();
             $migrationsPath = $phinxPath . 'migrations' . $di;
             $seedsPath      = $phinxPath . 'seeds' . $di;
@@ -182,7 +138,7 @@ abstract class PhinxCommand extends Command
     protected function getLocalPhinxPath(): string
     {
         $di        = DIRECTORY_SEPARATOR;
-        $localPath = $this->getPhinxConfig('local')['phinx_path'];
+        $localPath = $this->getPhinxConfig(Phinx::LOCAL)['phinx_path'];
         $localPath = rtrim(str_replace(['/', '\\'], [$di, $di], $localPath), $di) . $di;
         return $localPath;
     }

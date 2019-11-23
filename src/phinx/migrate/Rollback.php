@@ -13,6 +13,7 @@
 namespace itxq\phinx\migrate;
 
 use DateTime;
+use itxq\phinx\Phinx;
 use Phinx\Migration\AbstractMigration;
 use Phinx\Migration\MigrationInterface;
 use think\console\Input;
@@ -63,7 +64,7 @@ EOT
         if (empty($packageName)) {
             // 回滚本地
             if (is_dir($this->getLocalPhinxPath() . 'migrations')) {
-                $this->rollback('local', $input, $output);
+                $this->rollback(Phinx::LOCAL, $input, $output);
             }
             // 回滚所有包
             foreach ($this->getVendorPackages() as $packageName => $packageInfo) {

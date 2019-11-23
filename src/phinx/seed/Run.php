@@ -12,6 +12,7 @@
 
 namespace itxq\phinx\seed;
 
+use itxq\phinx\Phinx;
 use Phinx\Seed\SeedInterface;
 use think\console\Input;
 use think\console\input\Option;
@@ -58,7 +59,7 @@ EOT
         if (empty($packageName)) {
             // 迁移本地
             if (is_dir($this->getLocalPhinxPath() . 'seeds')) {
-                $this->seed('local', $output, $seed);
+                $this->seed(Phinx::LOCAL, $output, $seed);
             }
             // 迁移所有包
             foreach ($this->getVendorPackages() as $packageName => $packageInfo) {
