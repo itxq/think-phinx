@@ -86,7 +86,7 @@ abstract class PhinxCommand extends Command
         if (empty($packageName)) {
             return $phinxConfig;
         }
-        if ($packageName === Phinx::LOCAL) {
+        if ($packageName === \itxq\phinx\Phinx::LOCAL) {
             $phinxPath      = $this->getLocalPhinxPath();
             $migrationsPath = $phinxPath . 'migrations' . $di;
             $seedsPath      = $phinxPath . 'seeds' . $di;
@@ -139,7 +139,7 @@ abstract class PhinxCommand extends Command
     protected function getLocalPhinxPath(): string
     {
         $di        = DIRECTORY_SEPARATOR;
-        $localPath = $this->getPhinxConfig(Phinx::LOCAL)['phinx_path'];
+        $localPath = $this->getPhinxConfig(\itxq\phinx\Phinx::LOCAL)['phinx_path'];
         $localPath = rtrim(str_replace(['/', '\\'], [$di, $di], $localPath), $di) . $di;
         return $localPath;
     }
