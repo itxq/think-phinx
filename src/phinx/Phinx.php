@@ -14,6 +14,8 @@ namespace itxq\phinx;
 
 use Phinx\Db\Adapter\AdapterFactory;
 use Phinx\Db\Adapter\AdapterInterface;
+use Phinx\Db\Table;
+use think\App;
 
 /**
  * Class Phinx
@@ -27,14 +29,41 @@ class Phinx
     public const LOCAL = 'local';
 
     /**
+     * @var \think\App
+     */
+    protected $app;
+
+    /**
+     * Phinx constructor.
+     * @param \think\App $app
+     */
+    public function __construct(App $app)
+    {
+        $this->app = $app;
+    }
+
+    /**
+     * 获取 Phinx\Db\Table 实例
+     * @param string     $tableName 数据表名
+     * @param array      $options   参数
+     * @param string     $package
+     * @param array|null $adapterOptions
+     * @return \Phinx\Db\Table
+     */
+    public function table(string $tableName, array $options = [], string $package = self::LOCAL, ?array $adapterOptions = null): Table
+    {
+        return new Table($tableName, $options, $this->getAdapter($package, $adapterOptions));
+    }
+
+    /**
      * Get an adapter
      * @param string     $package 包名称
      * @param array|null $options
      * @return \Phinx\Db\Adapter\AdapterInterface
      */
-    public static function getAdapter(string $package = self::LOCAL, ?array $options = null): AdapterInterface
+    public function getAdapter(string $package = self::LOCAL, ?array $options = null): AdapterInterface
     {
-        $options = $options ?? self::getPhinxConfig($package);
+        $options = $options ?? $this->getPhinxConfig($package);
         $adapter = AdapterFactory::instance()->getAdapter($options['adapter'], $options);
         if ($adapter->hasOption('table_prefix') || $adapter->hasOption('table_suffix')) {
             $adapter = AdapterFactory::instance()->getWrapper('prefix', $adapter);
@@ -47,11 +76,11 @@ class Phinx
      * @param string $package
      * @return array
      */
-    public static function getPhinxConfig(string $package = self::LOCAL): array
+    public function getPhinxConfig(string $package = self::LOCAL): array
     {
-        $default = app()->config->get('database.default');
+        $default = $this->app->config->get('database.default');
 
-        $config = app()->config->get("database.connections.{$default}");
+        $config = $this->app->config->get("database.connections.{$default}");
 
         if (0 === (int)$config['deploy']) {
             $phinxConfig = [
@@ -77,17 +106,17 @@ class Phinx
             ];
         }
 
-        $phinxConfig = array_merge($phinxConfig, app()->config->get('phinx.database', []));
+        $phinxConfig = array_merge($phinxConfig, $this->app->config->get('phinx.database', []));
 
-        $table = app()->config->get('phinx.migration_table', 'migration');
+        $table = $this->app->config->get('phinx.migration_table', 'migration');
         if (!empty($package)) {
             $table .= '_' . strtolower(md5($package));
         }
 
-        $defaultPhinxPath                       = realpath(app()->getRootPath()) . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR;
-        $phinxConfig['phinx_path']              = app()->config->get('phinx.phinx_path', $defaultPhinxPath);
+        $defaultPhinxPath                       = realpath($this->app->getRootPath()) . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR;
+        $phinxConfig['phinx_path']              = $this->app->config->get('phinx.phinx_path', $defaultPhinxPath);
         $phinxConfig['default_migration_table'] = $phinxConfig['table_prefix'] . $table;
-        $phinxConfig['version_order']           = app()->config->get('phinx.version_order', 'creation');
+        $phinxConfig['version_order']           = $this->app->config->get('phinx.version_order', 'creation');
         return $phinxConfig;
     }
 }
