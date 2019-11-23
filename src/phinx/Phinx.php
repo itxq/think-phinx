@@ -12,6 +12,7 @@
 
 namespace itxq\phinx;
 
+use Cake\Database\Query;
 use Phinx\Db\Adapter\AdapterFactory;
 use Phinx\Db\Adapter\AdapterInterface;
 use Phinx\Db\Table;
@@ -43,6 +44,100 @@ class Phinx
     }
 
     /**
+     * Execute查询
+     * @param string     $sql
+     * @param string     $package
+     * @param array|null $adapterOptions
+     * @return mixed
+     */
+    public function execute(string $sql, string $package = self::LOCAL, ?array $adapterOptions = null): int
+    {
+        return $this->getAdapter($package, $adapterOptions)->execute($sql);
+    }
+
+    /**
+     * Query查询
+     * @param string     $sql
+     * @param string     $package
+     * @param array|null $adapterOptions
+     * @return mixed
+     */
+    public function query(string $sql, string $package = self::LOCAL, ?array $adapterOptions = null)
+    {
+        return $this->getAdapter($package, $adapterOptions)->query($sql);
+    }
+
+    /**
+     * fetchRow
+     * @param string     $sql
+     * @param string     $package
+     * @param array|null $adapterOptions
+     * @return array
+     */
+    public function fetchRow(string $sql, string $package = self::LOCAL, ?array $adapterOptions = null): array
+    {
+        return $this->getAdapter($package, $adapterOptions)->fetchRow($sql);
+    }
+
+    /**
+     * fetchAll
+     * @param string     $sql
+     * @param string     $package
+     * @param array|null $adapterOptions
+     * @return array
+     */
+    public function fetchAll(string $sql, string $package = self::LOCAL, ?array $adapterOptions = null): array
+    {
+        return $this->getAdapter($package, $adapterOptions)->fetchAll($sql);
+    }
+
+    /**
+     * getQueryBuilder
+     * @param string     $package
+     * @param array|null $adapterOptions
+     * @return \Cake\Database\Query
+     */
+    public function getQueryBuilder(string $package = self::LOCAL, ?array $adapterOptions = null): Query
+    {
+        return $this->getAdapter($package, $adapterOptions)->getQueryBuilder();
+    }
+
+    /**
+     * 创建数据库
+     * @param string     $name
+     * @param            $options
+     * @param string     $package
+     * @param array|null $adapterOptions
+     */
+    public function createDatabase(string $name, $options, string $package = self::LOCAL, ?array $adapterOptions = null): void
+    {
+        $this->getAdapter($package, $adapterOptions)->createDatabase($name, $options);
+    }
+
+    /**
+     * 删除数据库
+     * @param string     $name
+     * @param string     $package
+     * @param array|null $adapterOptions
+     */
+    public function dropDatabase(string $name, string $package = self::LOCAL, ?array $adapterOptions = null): void
+    {
+        $this->getAdapter($package, $adapterOptions)->dropDatabase($name);
+    }
+
+    /**
+     * 判断表是否存在
+     * @param string     $tableName
+     * @param string     $package
+     * @param array|null $adapterOptions
+     * @return bool
+     */
+    public function hasTable(string $tableName, string $package = self::LOCAL, ?array $adapterOptions = null): bool
+    {
+        return $this->getAdapter($package, $adapterOptions)->hasTable($tableName);
+    }
+
+    /**
      * 获取 Phinx\Db\Table 实例
      * @param string     $tableName 数据表名
      * @param array      $options   参数
@@ -58,12 +153,12 @@ class Phinx
     /**
      * Get an adapter
      * @param string     $package 包名称
-     * @param array|null $options
+     * @param array|null $adapterOptions
      * @return \Phinx\Db\Adapter\AdapterInterface
      */
-    public function getAdapter(string $package = self::LOCAL, ?array $options = null): AdapterInterface
+    public function getAdapter(string $package = self::LOCAL, ?array $adapterOptions = null): AdapterInterface
     {
-        $options = $options ?? $this->getPhinxConfig($package);
+        $options = $adapterOptions ?? $this->getPhinxConfig($package);
         $adapter = AdapterFactory::instance()->getAdapter($options['adapter'], $options);
         if ($adapter->hasOption('table_prefix') || $adapter->hasOption('table_suffix')) {
             $adapter = AdapterFactory::instance()->getWrapper('prefix', $adapter);
