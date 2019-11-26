@@ -29,6 +29,7 @@ use think\Facade;
  * @method bool hasTable(string $tableName, string $package = self::LOCAL, ?array $adapterOptions = null) static 判断表是否存在
  * @method Table table(string $tableName, array $options = [], string $package = self::LOCAL, ?array $adapterOptions = null) static 获取Phinx\Db\Table实例
  * @method AdapterInterface getAdapter(string $package = self::LOCAL, ?array $options = null) static Get an adapter
+ * @method AdapterInterface setAdapter(string $package = self::LOCAL, ?array $adapterOptions = null) static Create an adapter
  * @method array getPhinxConfig(string $package = self::LOCAL) static 获取配置
  * @see     \itxq\phinx\Phinx
  * @mixin      \itxq\phinx\Phinx

@@ -35,6 +35,11 @@ class Phinx
     protected $app;
 
     /**
+     * @var AdapterInterface[]
+     */
+    protected $adapter;
+
+    /**
      * Phinx constructor.
      * @param \think\App $app
      */
@@ -157,6 +162,22 @@ class Phinx
      * @return \Phinx\Db\Adapter\AdapterInterface
      */
     public function getAdapter(string $package = self::LOCAL, ?array $adapterOptions = null): AdapterInterface
+    {
+        if (isset($this->adapter[$package])) {
+            return $this->adapter[$package];
+        }
+        $adapter                 = $this->setAdapter($package, $adapterOptions);
+        $this->adapter[$package] = $adapter;
+        return $adapter;
+    }
+
+    /**
+     * Create an adapter
+     * @param string     $package 包名称
+     * @param array|null $adapterOptions
+     * @return \Phinx\Db\Adapter\AdapterInterface
+     */
+    public function setAdapter(string $package = self::LOCAL, ?array $adapterOptions = null): AdapterInterface
     {
         $options = $adapterOptions ?? $this->getPhinxConfig($package);
         $adapter = AdapterFactory::instance()->getAdapter($options['adapter'], $options);
